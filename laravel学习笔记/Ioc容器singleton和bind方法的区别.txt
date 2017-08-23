@@ -1,0 +1,70 @@
+Laravel中使用Ioc容器的singleton方法和bind方法创建实例有什么区别呢？它们两个都是返回一个类的实例，不同的是singleton是单例模式，而bind是每次返回一个新的实例，看下面的两个例子。
+
+1.Ioc容器bind方法
+
+<?php
+ 
+require __DIR__.'/../bootstrap/autoload.php';
+ 
+class tanteng
+{
+    public $name;
+}
+ 
+$container = new Illuminate\Container\Container();
+ 
+$container->bind('tanteng');
+ 
+$instance = $container->make('tanteng');
+$instance->name = 'tanteng';
+ 
+$instance2 = $container->make('tanteng');
+$instance2->name = 'tuntun';
+ 
+echo $instance->name.' '.$instance2->name;
+输出的结果：
+
+tanteng tuntun
+
+结论：
+
+通过bind方法创建实例不是单例模式，而是创建新的实例。
+
+2.Ioc容器singleton方法
+
+<?php
+ 
+require __DIR__.'/../bootstrap/autoload.php';
+ 
+class single
+{
+    public $value;
+}
+ 
+$container = new Illuminate\Container\Container();
+ 
+$container->singleton('single');
+$instance3 = $container->make('single');
+$instance4 = $container->make('single');
+ 
+$instance3->value = 'aaaa';
+$instance4->value = 'bbbb';
+ 
+echo $instance3->value.' '.$instance4->value;
+输出结果：
+
+bbbb bbbb
+
+结论：
+
+使用singleton创建实例使用的是单例模式，每次返回同一个实例。
+
+以上代码可以放在public下，如test.php运行。
+
+再看框架底层代码：
+
+public function singleton($abstract, $concrete = null)
+{
+    $this->bind($abstract, $concrete, true);
+}
+发现singleton方法其实也是调用bind方法，只是最后一个参数是true，表示单例模式。框架源代码：Illuminate/Container/Container.php

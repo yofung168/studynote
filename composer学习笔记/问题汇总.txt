@@ -1,0 +1,5 @@
+1、 zlib_decode(): data error
+
+描述：使用composer 安装lumen 项目，执行composer create-project laravel/lumen --prefer-dist，命令报 [ErrorException]    zlib_decode(): data error 错。 
+
+解决办法：执行 composer self-update 即可
