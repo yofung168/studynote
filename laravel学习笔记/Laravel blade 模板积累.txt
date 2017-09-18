@@ -1,0 +1,59 @@
+{{ $var }} - 输出PHP变量
+
+{{ $var or 'default' }} - 输出PHP变量带默认值
+
+{{{ $var }}} - 输出转义内容
+
+{{-- Comment --}} - 模板注释
+
+@extends('layout') - 继承模板
+
+@if(condition) - if语句开头
+
+@else - else
+
+@elseif(condition) - else if
+
+@endif - if结束
+
+@foreach($list as $key => $val) - foreach开头
+
+@endforeach - foreach结束
+
+@for($i = 0; $i < 10; $i++) - for开头
+
+@endfor - for结尾
+
+@while(condition) - while 开头
+
+@endwhile - while 结尾
+
+@unless(condition) - unless 开头
+
+@endunless - unless 结尾
+
+include(file) - 引入模板
+
+@include(file, ['var' => $val,...]) - 通过新变量引入模板.
+
+@each('file',$list,'item') - 渲染模板集合
+
+@each('file',$list,'item','empty')- 渲染集合中一个模板如果该模板不存在或空渲染另一个
+
+@yield('section') - 定义一个区块.
+
+@show - 结束定义区块
+
+@lang('message') - 输出多语言
+
+@choice('message', $count) - 输出国际化语言
+
+@section('name') - section区块开始
+
+@stop - section结束（section的处理到此为止）
+
+@endsection - section结束（在 4.0 版本中已经被移除）
+
+@append - 通过section的名字追加到section内容里
+
+@overwrite - 通过section的名字，覆盖之前的所有定义，以这次的为准

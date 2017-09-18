@@ -1,0 +1,46 @@
+http://www.haowt.info/archives/35.html
+做了个简单的网站，本地使用wamp没有任何问题，完成后放在了朋友的服务器上，使用的是win2003，因为还有其他的服务，所以使用的是IIS作为web服务器，登录后退出时，提示以下错误：
+
+Warning: session_destroy() [function.session-destroy]: Session object destruction failed in D:webPhpWebSiteXXXaccount.php on line 40
+
+对应行数的代码就是简单的销毁session的代码：
+
+$old_account = $_SESSION[‘login_account’];
+
+unset($_SESSION[‘login_account’]);
+$result_dest = session_destroy();
+
+if (!empty($old_account)){
+if ($result_dest){
+Get_admin_msg(‘../index.php’,’已经成功退出’);
+}else{
+alert_back(‘未能成功退出，请重试’);
+}
+}else{
+alert_back(‘您没有登录，所以不需要退出’);
+}
+
+检查也未发现前面有任何输出，遂google之，终于找到了产生问题的原因
+
+产生这个问题的原因是因为php.ini中没有指定session.sava_path的保存路径，可是默认的路径服务器又没有写权限造成的（当然也可能是设置的路径没有写权限），每次使用session时只开启了变量但是没有保存session文件，然后使用session_destroy()删除的时候就会产生上面的warning。
+
+所以只需要修改php.ini中session.save_path的路径有写权限就可以。
+
+还有一种情况（我自己碰到的情况…），就是使用的别人的服务器或者虚拟空间，没有修改php.ini文件的权限，这时候只需要在程序中使用ini_set()或者session_save_path()来设置session.save_path
+
+ini_set(‘session.save_path’,.dirname(__FILE__).’/../session/’);
+
+$old_account = $_SESSION[‘login_account’];
+
+unset($_SESSION[‘login_account’]);
+$result_dest = session_destroy();
+
+if (!empty($old_account)){
+if ($result_dest){
+Get_admin_msg(‘../index.php’,’已经成功退出’);
+}else{
+alert_back(‘未能成功退出，请重试’);
+}
+}else{
+alert_back(‘您没有登录，所以不需要退出’);
+}
