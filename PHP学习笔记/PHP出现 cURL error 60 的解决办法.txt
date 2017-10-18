@@ -1,0 +1,7 @@
+PHP出现 cURL error 60: SSL certificate: unable to get local issuer certificate.的解决办法。
+
+方法/步骤
+最近使用symfony3设计程序，在运行 php symfony new blog 的时候出现了一个不小的错误。"cURL error 60: SSL certificate: unable to get local issuer certificate."看提示应该是证书出现了问题，果断谷歌了一下。
+结果就是需要网上面下载一个【cacert.pem】的文件，然后放在【:path\to\php\extras\ssl\cacert.pem】也就是php路径下的【extras\ssl\】文件夹里面。
+3
+然后打开【php.ini】文件，找到最后面的【curl.cainfo = 】修改为【curl.cainfo = "C:\xampp\php\extras\ssl\cacert.pem"】，保存即可。这样我再运行php symfony new blog的时候就可以成功创建我的项目了。
